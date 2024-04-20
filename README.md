@@ -20,7 +20,9 @@ npm i
 npx prisma migrate dev --name
 ```
 
-## Rename the .env.template to .env and set the environment variables
+## Set the .env file
+Rename the .env.template to .env and set the environment variables
+
 - PORT=
 - DATABASE_URL=
 
