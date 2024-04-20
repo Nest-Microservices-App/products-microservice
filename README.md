@@ -17,7 +17,7 @@ npm i
 
 ## Create the prisma migrations
 ```
-npx prisma migrate dev --name
+npx prisma migrate dev
 ```
 
 ## Set the .env file
