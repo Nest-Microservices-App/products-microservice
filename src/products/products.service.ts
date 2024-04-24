@@ -47,7 +47,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Product> {
     const product: Product = await this.product.findFirst({
       where: {
         id: id,
@@ -60,9 +60,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
         status: HttpStatus.BAD_REQUEST,
       });
 
-    return {
-      product,
-    };
+    return product
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
@@ -78,7 +76,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Product> {
     await this.findOne(id);
 
     // return this.product.delete({
@@ -98,5 +96,26 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     });
 
     return product;
+  }
+
+  async validateProducts(ids: number[]): Promise<Product[]> {
+    ids = Array.from(new Set(ids));
+
+    const products: Product[] = await this.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    if (products.length !== ids.length) {
+      throw new RpcException({
+        message: `Some products were not found`,
+        status: HttpStatus.BAD_REQUEST,
+      });
+    }
+
+    return products;
   }
 }
